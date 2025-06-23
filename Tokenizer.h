@@ -16,6 +16,17 @@ private:
     size_t pos = 0;
     int line = 1;
 
+    // Keyword lookup table
+    const std::unordered_map<std::string, TokenType> keywords = {
+        {"if", TokenType::If},
+        {"else", TokenType::Else},
+        {"while", TokenType::While},
+        {"for", TokenType::For},
+        {"print", TokenType::Print},
+        {"break", TokenType::Break},
+        {"continue", TokenType::Continue}
+    };
+
     // Helpers
     char peek() const;
     char peekNext() const;
@@ -24,10 +35,11 @@ private:
     void skipWhitespace();
 
     Token identifier();
-    Token number();
+    Token number();         // Handles both Integer and Float
+    Token stringLiteral();  // For "string"
+    Token charLiteral();    // For 'c'
     Token makeToken(TokenType type, const std::string& text);
 
-    // Optional: keyword map
     TokenType checkKeyword(const std::string& text);
 };
 

@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-// Forward declarations
+// --- Forward declarations ---
 struct Expr;
 struct Stmt;
 
@@ -15,11 +15,26 @@ struct Expr {
     virtual ~Expr() = default;
 };
 
-// Expression subclasses
+// --- Expression subclasses ---
 
-struct NumberExpr : Expr {
-    double value;
-    NumberExpr(double val) : value(val) {}
+struct IntExpr : Expr {
+    int value;
+    IntExpr(int val) : value(val) {}
+};
+
+struct FloatExpr : Expr {
+    float value;
+    FloatExpr(float val) : value(val) {}
+};
+
+struct CharExpr : Expr {
+    char value;
+    CharExpr(char val) : value(val) {}
+};
+
+struct StringExpr : Expr {
+    std::string value;
+    StringExpr(const std::string& val) : value(val) {}
 };
 
 struct VariableExpr : Expr {
@@ -36,12 +51,20 @@ struct BinaryExpr : Expr {
         : left(std::move(l)), op(oper), right(std::move(r)) {}
 };
 
+struct UnaryExpr : Expr {
+    Token op;
+    std::unique_ptr<Expr> right;
+
+    UnaryExpr(const Token& oper, std::unique_ptr<Expr> rhs)
+        : op(oper), right(std::move(rhs)) {}
+};
+
 // --- Statement base ---
 struct Stmt {
     virtual ~Stmt() = default;
 };
 
-// Statement subclasses
+// --- Statement subclasses ---
 
 struct PrintStmt : Stmt {
     std::unique_ptr<Expr> expression;
@@ -59,7 +82,7 @@ struct AssignStmt : Stmt {
 struct IfStmt : Stmt {
     std::unique_ptr<Expr> condition;
     std::unique_ptr<Stmt> thenBranch;
-    std::unique_ptr<Stmt> elseBranch;  // nullable
+    std::unique_ptr<Stmt> elseBranch;
 
     IfStmt(std::unique_ptr<Expr> cond, std::unique_ptr<Stmt> thenB, std::unique_ptr<Stmt> elseB)
         : condition(std::move(cond)), thenBranch(std::move(thenB)), elseBranch(std::move(elseB)) {}
@@ -73,11 +96,24 @@ struct WhileStmt : Stmt {
         : condition(std::move(cond)), body(std::move(bod)) {}
 };
 
+struct ForStmt : Stmt {
+    std::unique_ptr<Stmt> initializer;
+    std::unique_ptr<Expr> condition;
+    std::unique_ptr<Stmt> increment;
+    std::unique_ptr<Stmt> body;
+
+    ForStmt(std::unique_ptr<Stmt> init, std::unique_ptr<Expr> cond,
+            std::unique_ptr<Stmt> incr, std::unique_ptr<Stmt> bod)
+        : initializer(std::move(init)), condition(std::move(cond)),
+          increment(std::move(incr)), body(std::move(bod)) {}
+};
+
 struct BlockStmt : Stmt {
     std::vector<std::unique_ptr<Stmt>> statements;
-
-    BlockStmt(std::vector<std::unique_ptr<Stmt>> stmts)
-        : statements(std::move(stmts)) {}
+    BlockStmt(std::vector<std::unique_ptr<Stmt>> stmts) : statements(std::move(stmts)) {}
 };
+
+struct BreakStmt : Stmt {};
+struct ContinueStmt : Stmt {};
 
 #endif // AST_H

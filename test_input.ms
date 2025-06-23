@@ -1,16 +1,15 @@
-x = 10;
-y = 20;
+a = 10;
+b = 5;
+c = a + b * 2;
+print c;
 
-print x;
-print y;
-
-if (x < y) {
-    print 100;
+if (c > 15) {
+    print "c is greater than 15";
 } else {
-    print 200;
+    print "c is 15 or less";
 }
 
-while (x > 0) {
-    print x;
-    x = x - 1;
-}
+ch = "A";
+msg = "Hello MiniScript!";
+print ch;
+print msg;

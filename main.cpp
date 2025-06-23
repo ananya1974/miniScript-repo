@@ -44,8 +44,13 @@ int main(int argc, char* argv[]) {
     }
 
     // Interpret
-    Interpreter interpreter;
-    interpreter.interpret(statements);
+    try {
+        Interpreter interpreter;
+        interpreter.interpret(statements);
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Runtime error: " << e.what() << std::endl;
+        return 1;
+    }
 
     return 0;
 }

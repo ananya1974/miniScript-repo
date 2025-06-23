@@ -9,35 +9,41 @@ enum class TokenType {
     Unknown,
 
     // Literals and identifiers
-    Identifier,     // Variable names, function names
-    Number,         // Integer literals
+    Identifier,
+    Integer,
+    Float,
+    Char,
+    String,
 
     // Operators
-    Plus,           // +
-    Minus,          // -
-    Star,           // *
-    Slash,          // /
-    Equal,          // =
-    DoubleEqual,    // ==
-    NotEqual,       // !=
-    Less,           // <
-    LessEqual,      // <=
-    Greater,        // >
-    GreaterEqual,   // >=
+    Plus,
+    Minus,
+    Star,
+    Slash,
+    Equal,
+    DoubleEqual,
+    NotEqual,
+    Less,
+    LessEqual,
+    Greater,
+    GreaterEqual,
 
     // Delimiters
-    LeftParen,      // (
-    RightParen,     // )
-    LeftBrace,      // {
-    RightBrace,     // }
-    Semicolon,      // ;
-    Comma,          // ,
+    LeftParen,
+    RightParen,
+    LeftBrace,
+    RightBrace,
+    Semicolon,
+    Comma,
 
     // Keywords
-    Print,          // print
-    If,             // if
-    Else,           // else
-    While           // while
+    Print,
+    If,
+    Else,
+    While,
+    For,         // <--- NEW
+    Break,       // <--- NEW (optional)
+    Continue     // <--- NEW (optional)
 };
 
 struct Token {

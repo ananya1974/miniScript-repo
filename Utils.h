@@ -4,12 +4,18 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 
-std::string read_input(const std::string& filename) {
+// Must be marked inline to avoid multiple definitions
+inline std::string read_input(const std::string& filename) {
     std::ifstream file(filename);
+    if (!file.is_open()) {
+        throw std::runtime_error("Failed to open file: " + filename);
+    }
+
     std::stringstream buffer;
     buffer << file.rdbuf();
     return buffer.str();
 }
 
-#endif
+#endif // UTILS_H

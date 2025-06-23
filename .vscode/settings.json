@@ -47,6 +47,13 @@
         "print": "cpp",
         "sstream": "cpp",
         "algorithm": "cpp",
-        "__hash_table": "cpp"
+        "__hash_table": "cpp",
+        "any": "cpp",
+        "charconv": "cpp",
+        "deque": "cpp",
+        "forward_list": "cpp",
+        "iomanip": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     }
 }

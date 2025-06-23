@@ -4,10 +4,13 @@
 
 // Keyword lookup table
 static std::unordered_map<std::string, TokenType> keywords = {
-    {"print", TokenType::Print},
-    {"if",    TokenType::If},
-    {"else",  TokenType::Else},
-    {"while", TokenType::While}
+    {"print",    TokenType::Print},
+    {"if",       TokenType::If},
+    {"else",     TokenType::Else},
+    {"while",    TokenType::While},
+    {"for",      TokenType::For},
+    {"break",    TokenType::Break},
+    {"continue", TokenType::Continue}
 };
 
 Tokenizer::Tokenizer(const std::string& src) : source(src) {}
@@ -71,9 +74,44 @@ Token Tokenizer::identifier() {
 
 Token Tokenizer::number() {
     size_t start = pos - 1;
+    bool isFloat = false;
+
     while (isdigit(peek())) advance();
+
+    if (peek() == '.' && isdigit(peekNext())) {
+        isFloat = true;
+        advance(); // consume '.'
+        while (isdigit(peek())) advance();
+    }
+
     std::string text = source.substr(start, pos - start);
-    return makeToken(TokenType::Number, text);
+    return makeToken(isFloat ? TokenType::Float : TokenType::Integer, text);
+}
+
+Token Tokenizer::stringLiteral() {
+    size_t start = pos;
+    while (peek() != '"' && peek() != '\0') {
+        if (peek() == '\n') line++;
+        advance();
+    }
+
+    if (peek() == '"') advance(); // consume closing quote
+
+    std::string text = source.substr(start, pos - start - 1);
+    return makeToken(TokenType::String, text);
+}
+
+Token Tokenizer::charLiteral() {
+    size_t start = pos;
+
+    if (peek() != '\'' || peekNext() == '\0') return makeToken(TokenType::Unknown, "'");
+
+    char c = advance(); // character
+    if (match('\'')) {
+        return makeToken(TokenType::Char, std::string(1, c));
+    }
+
+    return makeToken(TokenType::Unknown, source.substr(start - 1, 2));
 }
 
 Token Tokenizer::getNextToken() {
@@ -109,6 +147,10 @@ Token Tokenizer::getNextToken() {
         case '>':
             if (match('=')) return makeToken(TokenType::GreaterEqual, ">=");
             else return makeToken(TokenType::Greater, ">");
+        case '"':
+            return stringLiteral();
+        case '\'':
+            return charLiteral();
     }
 
     return makeToken(TokenType::Unknown, std::string(1, c));

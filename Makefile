@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++14 -Wall -Wextra -g
+CXXFLAGS = -std=c++17 -Wall -Wextra -g
 
 SRC = main.cpp Tokenizer.cpp Parser.cpp Environment.cpp Interpreter.cpp
 OBJ = $(SRC:.cpp=.o)
